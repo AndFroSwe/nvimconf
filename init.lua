@@ -133,6 +133,10 @@ vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv")
 vim.keymap.set('n', '<A-j>', ':m.+1<CR>')
 vim.keymap.set('n', '<A-k>', ':m.-2<CR>')
 
+-- Splits
+vim.keymap.set('n', '<leader>-', ':spl<CR>')
+vim.keymap.set('n', '<leader>|', ':vsp<CR>')
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -465,27 +469,27 @@ require('lazy').setup({
 
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
-          map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
+          map('<leader>ca', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
 
           -- Find references for the word under your cursor.
-          map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+          map('<leader>gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 
           -- Jump to the implementation of the word under your cursor.
           --  Useful when your language has ways of declaring types without an actual implementation.
-          map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+          map('<leader>gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
 
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
           --  To jump back, press <C-t>.
-          map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+          map('<leader>gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
-          map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          map('<leader>gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
           -- Fuzzy find all the symbols in your current document.
           --  Symbols are things like variables, functions, types, etc.
@@ -498,9 +502,9 @@ require('lazy').setup({
           -- Jump to the type of the word under your cursor.
           --  Useful when you're not sure what type a variable is and you want to see
           --  the definition of its *type*, not where it was *defined*.
-          map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
+          map('<leader>gt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
-          map('grh', '<cmd>LspClangdSwitchSourceHeader<cr>', 'Switch Source/Header (C/C++)')
+          map('<leader>gh', '<cmd>LspClangdSwitchSourceHeader<cr>', 'Switch Source/Header (C/C++)')
 
           -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
           ---@param client vim.lsp.Client
@@ -560,25 +564,39 @@ require('lazy').setup({
       -- See :help vim.diagnostic.Opts
       vim.diagnostic.config {
         severity_sort = true,
-        float = { border = 'rounded', source = 'if_many' },
-        underline = { severity = vim.diagnostic.severity.ERROR },
+        -- what to show in the float
+        float = {
+          border = 'rounded',
+          source = 'if_many',
+          format = function(diagnostic)
+            if diagnostic.code then
+              return string.format('%s\n\n[%s]', diagnostic.message, diagnostic.code)
+            else
+              return string.format('banankaka: %s', diagnostic.message)
+            end
+          end,
+        },
+        underline = {
+          -- severity = vim.diagnostic.severity.ERROR
+        },
         signs = vim.g.have_nerd_font and {
           text = {
-            [vim.diagnostic.severity.ERROR] = '󰅚 ',
+            [vim.diagnostic.severity.ERROR] = '󰅚',
             [vim.diagnostic.severity.WARN] = '󰀪 ',
             [vim.diagnostic.severity.INFO] = '󰋽 ',
             [vim.diagnostic.severity.HINT] = '󰌶 ',
           },
         } or {},
+        -- what to show in ...
         virtual_text = {
           source = 'if_many',
           spacing = 2,
           format = function(diagnostic)
             local diagnostic_message = {
-              [vim.diagnostic.severity.ERROR] = diagnostic.message,
-              [vim.diagnostic.severity.WARN] = diagnostic.message,
-              [vim.diagnostic.severity.INFO] = diagnostic.message,
-              [vim.diagnostic.severity.HINT] = diagnostic.message,
+              [vim.diagnostic.severity.ERROR] = string.format('%s %s [%s]', '󰅚', diagnostic.message, diagnostic.code),
+              [vim.diagnostic.severity.WARN] = string.format('%s %s [%s]', '󰀪', diagnostic.message, diagnostic.code),
+              [vim.diagnostic.severity.INFO] = string.format('%s %s [%s]', '󰋽', diagnostic.message, diagnostic.code),
+              [vim.diagnostic.severity.HINT] = string.format('%s %s [%s]', '󰌶', diagnostic.message, diagnostic.code),
             }
             return diagnostic_message[diagnostic.severity]
           end,
@@ -607,6 +625,7 @@ require('lazy').setup({
             '--background-index',
             '--clang-tidy',
             '--header-insertion=iwyu',
+            '--header-insertion-decorators',
             '--completion-style=detailed',
             '--function-arg-placeholders',
             '--fallback-style=llvm',
