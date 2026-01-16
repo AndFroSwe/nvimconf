@@ -52,7 +52,7 @@ vim.o.smartcase = true
 vim.o.signcolumn = 'yes'
 
 -- Decrease update time
-vim.o.updatetime = 250
+vim.o.updatetime = 500
 
 -- Decrease mapped sequence wait time
 vim.o.timeoutlen = 300
@@ -527,10 +527,23 @@ require('lazy').setup({
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+
+            -- include opening float for diagnostics if they exist
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
               group = highlight_augroup,
-              callback = vim.lsp.buf.document_highlight,
+              callback = function()
+                -- highlight references
+                vim.lsp.buf.document_highlight()
+                -- open diagnostic float
+                vim.diagnostic.open_float(nil, {
+                  focusable = false,
+                  close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
+                  border = 'rounded',
+                  source = 'always',
+                  scope = 'cursor',
+                })
+              end,
             })
 
             vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
@@ -568,16 +581,20 @@ require('lazy').setup({
         float = {
           border = 'rounded',
           source = 'if_many',
+          -- what the float should look like
           format = function(diagnostic)
-            if diagnostic.code then
-              return string.format('%s\n\n[%s]', diagnostic.message, diagnostic.code)
-            else
-              return string.format('banankaka: %s', diagnostic.message)
-            end
+            local diag_sign = {
+              [vim.diagnostic.severity.ERROR] = '󰅚',
+              [vim.diagnostic.severity.WARN] = '󰀪',
+              [vim.diagnostic.severity.INFO] = '󰋽',
+              [vim.diagnostic.severity.HINT] = '󰌶',
+            }
+            local sign = diag_sign[diagnostic.severity] or ''
+            return string.format('%s %s', sign, diagnostic.message)
           end,
         },
         underline = {
-          -- severity = vim.diagnostic.severity.ERROR
+          -- always underling
         },
         signs = vim.g.have_nerd_font and {
           text = {
@@ -591,14 +608,17 @@ require('lazy').setup({
         virtual_text = {
           source = 'if_many',
           spacing = 2,
+          prefix = '<', -- will show up 2 times for some reason...
+          -- what the virtaul text should show
           format = function(diagnostic)
-            local diagnostic_message = {
-              [vim.diagnostic.severity.ERROR] = string.format('%s %s [%s]', '󰅚', diagnostic.message, diagnostic.code),
-              [vim.diagnostic.severity.WARN] = string.format('%s %s [%s]', '󰀪', diagnostic.message, diagnostic.code),
-              [vim.diagnostic.severity.INFO] = string.format('%s %s [%s]', '󰋽', diagnostic.message, diagnostic.code),
-              [vim.diagnostic.severity.HINT] = string.format('%s %s [%s]', '󰌶', diagnostic.message, diagnostic.code),
+            local diag_sign = {
+              [vim.diagnostic.severity.ERROR] = '󰅚',
+              [vim.diagnostic.severity.WARN] = '󰀪',
+              [vim.diagnostic.severity.INFO] = '󰋽',
+              [vim.diagnostic.severity.HINT] = '󰌶',
             }
-            return diagnostic_message[diagnostic.severity]
+            local sign = diag_sign[diagnostic.severity] or ''
+            return string.format('%s %s [%s]', sign, diagnostic.message, diagnostic.code)
           end,
         },
       }
