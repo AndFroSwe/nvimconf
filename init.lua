@@ -125,6 +125,14 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
+-- Moving blocks of text
+vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv")
+
+-- Moving single line
+vim.keymap.set('n', '<A-j>', ':m.+1<CR>')
+vim.keymap.set('n', '<A-k>', ':m.-2<CR>')
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
