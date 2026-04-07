@@ -5,3 +5,9 @@ nvim
 
 spell/
 lazy-lock.json
+
+# git
+*BACKUP*
+*BASE*
+*LOCAL*
+*REMOTE*
