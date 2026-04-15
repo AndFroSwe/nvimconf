@@ -9,6 +9,15 @@ vim.o.expandtab = true
 vim.o.shiftwidth = 2
 vim.o.smarttab = true
 vim.o.tabstop = 2
+vim.o.colorcolumn = '120'
+
+-- only set textwidth for files with no natural line break
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'text', 'markdown' },
+  callback = function()
+    vim.opt_local.textwidth = 120
+  end,
+})
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -20,8 +29,6 @@ vim.g.have_nerd_font = true
 
 -- Make line numbers default
 vim.o.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
 vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
@@ -673,6 +680,7 @@ require('lazy').setup({
         },
 
         neocmake = {},
+        asm_lsp = {},
       }
 
       -- Ensure the servers and tools above are installed
