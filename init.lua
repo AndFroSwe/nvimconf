@@ -530,7 +530,7 @@ require('lazy').setup({
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
 
             -- include opening float for diagnostics if they exist
-            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+            vim.api.nvim_create_autocmd('CursorHold', {
               buffer = event.buf,
               group = highlight_augroup,
               callback = function()
@@ -544,6 +544,14 @@ require('lazy').setup({
                   source = 'always',
                   scope = 'cursor',
                 })
+              end,
+            })
+
+            vim.api.nvim_create_autocmd('CursorHoldI', {
+              buffer = event.buf,
+              group = highlight_augroup,
+              callback = function()
+                vim.lsp.buf.signature_help()
               end,
             })
 
@@ -610,7 +618,7 @@ require('lazy').setup({
           source = 'if_many',
           spacing = 2,
           prefix = '<', -- will show up 2 times for some reason...
-          -- what the virtaul text should show
+          -- what the virtual text should show
           format = function(diagnostic)
             local diag_sign = {
               [vim.diagnostic.severity.ERROR] = '󰅚',
