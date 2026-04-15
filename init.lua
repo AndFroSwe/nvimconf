@@ -103,6 +103,15 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- Get man pages if exist
+vim.keymap.set('n', '<leader>m', function()
+  local word = vim.fn.expand '<cword>'
+  local ok, _ = pcall(vim.cmd, 'horizontal Man ' .. word)
+  if not ok then
+    print('No man page available: ' .. word)
+  end
+end, { desc = 'Open man pages' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -359,6 +368,10 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      -- man page search
+      vim.keymap.set('n', '<leader>sm', function()
+        builtin.man_pages { sections = { 'ALL' } }
+      end, { desc = '[S]earch in [M]an pages' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -534,14 +547,6 @@ require('lazy').setup({
                   source = 'always',
                   scope = 'cursor',
                 })
-              end,
-            })
-
-            vim.api.nvim_create_autocmd('CursorHoldI', {
-              buffer = event.buf,
-              group = highlight_augroup,
-              callback = function()
-                vim.lsp.buf.signature_help()
               end,
             })
 
