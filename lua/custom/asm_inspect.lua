@@ -5,9 +5,19 @@ local dump_asm = function(opt_level)
   local file = vim.fn.expand '%:p'
   local compiler = 'clang'
   local flags = '-S -g -fverbose-asm'
-  local cmd = compiler .. ' ' .. file .. ' ' .. flags .. ' -' .. opt_level .. ' -o - | llvm-cxxfilt'
+  local cmd = compiler .. ' ' .. file .. ' ' .. flags .. ' -' .. opt_level .. ' -o -'
 
-  local output = vim.fn.systemlist(cmd) -- try compile
+  -- try compile
+  local output = vim.fn.systemlist(cmd)
+
+  -- check for errors
+  if vim.v.shell_error ~= 0 then
+    vim.notify(table.concat(output, '\n'), vim.log.levels.ERROR)
+    return
+  end
+
+  -- ok, first demangle
+  output = vim.fn.systemlist('llvm-cxxfilt', output)
 
   -- create in an anonymous buffer
   vim.cmd 'vnew'
