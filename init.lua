@@ -134,8 +134,10 @@ vim.keymap.set('n', '<A-j>', ':m.+1<CR>')
 vim.keymap.set('n', '<A-k>', ':m.-2<CR>')
 
 -- Splits
-vim.keymap.set('n', '<leader>-', ':spl<CR>')
-vim.keymap.set('n', '<leader>|', ':vsp<CR>')
+vim.keymap.set('n', '<leader>-', ':spl<CR>', { desc = 'Split horizontally' })
+vim.keymap.set('n', '<leader>|', ':vsp<CR>', { desc = 'Split vertically' })
+
+--
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
