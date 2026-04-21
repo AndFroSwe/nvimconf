@@ -96,6 +96,19 @@ vim.o.confirm = true
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- make asm files more readable
+local asm_glowup = function()
+  --vim.opt_local.undolevels = -1
+  -- vim.cmd [[%s#\v/[^ \t\n:]+#\=luaeval('vim.fs.normalize(_A)', submatch(0))#ge]] -- normalize paths
+  -- vim.cmd 'set syntax=asm' -- get nice highlighting
+  vim.cmd '%g/#DEBUG_/d' -- remove dwarf comments
+  vim.cmd '%g/.Ltmp/d' -- remove dwarf block annotations
+end
+
+vim.keymap.set('n', '<leader>ag', function()
+  asm_glowup()
+end, { desc = 'Apply basic cleaning to ASM file with debug info' })
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
