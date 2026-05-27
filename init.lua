@@ -28,13 +28,13 @@ rtp:prepend(lazypath)
 
 -- Configure and install plugins
 require('lazy').setup({
+  require 'custom.plugins.colors', -- load this first
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
   require 'custom.plugins.telescope',
   require 'custom.plugins.gitsigns',
   require 'custom.plugins.which-key',
   require 'custom.plugins.lsp',
   require 'custom.plugins.which-key',
-  require 'custom.plugins.colors',
   require 'custom.plugins.todo-comments',
   require 'custom.plugins.treesitter',
   require 'custom.plugins.mini',
