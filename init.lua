@@ -1041,7 +1041,8 @@ require('lazy').setup({
       --   If not available, we use `mini` as the fallback
       'rcarriga/nvim-notify',
     },
-  }, -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
+  },
+  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
@@ -1053,6 +1054,7 @@ require('lazy').setup({
   -- you can continue same window with `<space>sr` which resumes last telescope search
   {
     'mrjones2014/smart-splits.nvim',
+    lazy = false,
     keys = {
       {
         '<C-h>',
@@ -1075,13 +1077,14 @@ require('lazy').setup({
       {
         '<C-l>',
         function()
-          require('smart-splits').move_cursor_down()
+          require('smart-splits').move_cursor_right()
         end,
       },
     },
-    run = './kitty/install-kittens.bash',
+    build = './kitty/install-kittens.bash',
     opts = {
       multiplexer_integration = 'kitty',
+      at_edge = 'stop',
     },
   },
 }, {
@@ -1105,6 +1108,3 @@ require('lazy').setup({
     },
   },
 })
-
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
