@@ -106,3 +106,13 @@ end, { desc = 'Dump assembly [-O2]' })
 vim.keymap.set('n', '<leader>ad3', function()
   dump_asm 'O3'
 end, { desc = 'Dump assembly [-O3]' })
+
+-- Make asm files more readable
+local asm_glowup = function()
+  vim.cmd '%g/#DEBUG_/d' -- remove dwarf comments
+  vim.cmd '%g/.Ltmp/d' -- remove dwarf block annotations
+end
+
+vim.keymap.set('n', '<leader>ag', function()
+  asm_glowup()
+end, { desc = 'Apply basic cleaning to ASM file with debug info' })
