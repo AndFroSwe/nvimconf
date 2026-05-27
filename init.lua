@@ -33,6 +33,7 @@ require('lazy').setup({
   require 'custom.plugins.telescope',
   require 'custom.plugins.gitsigns',
   require 'custom.plugins.which-key',
+  require 'custom.plugins.cmake-tools',
   require 'custom.plugins.lsp',
   require 'custom.plugins.which-key',
   require 'custom.plugins.todo-comments',

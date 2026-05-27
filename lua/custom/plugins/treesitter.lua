@@ -4,7 +4,23 @@ return { -- Highlight, edit, and navigate code
   build = ':TSUpdate',
   main = 'nvim-treesitter.configs',
   opts = {
-    ensure_installed = { 'bash', 'c', 'cpp', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python', 'json' },
+    ensure_installed = {
+      'bash',
+      'c',
+      'cpp',
+      'diff',
+      'html',
+      'lua',
+      'luadoc',
+      'markdown',
+      'markdown_inline',
+      'query',
+      'vim',
+      'vimdoc',
+      'python',
+      'json',
+      'cmake',
+    },
     -- Autoinstall languages that are not installed
     auto_install = true,
     highlight = {
