@@ -900,23 +900,49 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-        },
-      }
+    -- 'folke/tokyonight.nvim',
+    -- priority = 1000, -- Make sure to load this before all the other start plugins.
+    -- config = function()
+    -- ---@diagnostic disable-next-line: missing-fields
+    -- require('tokyonight').setup {
+    -- styles = {
+    -- comments = { italic = false }, -- Disable italics in comments
+    -- },
+    -- }
 
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
-    end,
+    -- Load the colorscheme here.
+    -- Like many other themes, this one has different styles, and you could load
+    -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+    -- vim.cmd.colorscheme 'tokyonight-night'
+    -- end,
   },
 
+  {
+    -- 'neanias/everforest-nvim',
+    -- version = false,
+    -- lazy = false,
+    -- priority = 1000, -- make sure to load this before all the other start plugins
+    -- -- Optional; default configuration will be used if setup isn't called.
+    -- config = function()
+    -- require('everforest').setup {
+    -- -- Your config here
+    -- }
+    -- vim.cmd.colorscheme 'everforest'
+    -- end,
+  },
+  {
+    'ellisonleao/gruvbox.nvim',
+    version = false,
+    lazy = false,
+    priority = 1000, -- make sure to load this before all the other start plugins
+    -- Optional; default configuration will be used if setup isn't called.
+    config = function()
+      require('gruvbox').setup {
+        -- Your config here
+      }
+      vim.cmd.colorscheme 'gruvbox'
+    end,
+  },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -1000,36 +1026,6 @@ require('lazy').setup({
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
-  -- Integrate pane switching with wezterm
-  {
-    'letieu/wezterm-move.nvim',
-    keys = { -- Lazy loading, don't need call setup() function
-      {
-        '<C-h>',
-        function()
-          require('wezterm-move').move 'h'
-        end,
-      },
-      {
-        '<C-j>',
-        function()
-          require('wezterm-move').move 'j'
-        end,
-      },
-      {
-        '<C-k>',
-        function()
-          require('wezterm-move').move 'k'
-        end,
-      },
-      {
-        '<C-l>',
-        function()
-          require('wezterm-move').move 'l'
-        end,
-      },
-    },
-  },
   -- command line in float
   {
     'folke/noice.nvim',
@@ -1055,6 +1051,39 @@ require('lazy').setup({
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
+  {
+    'mrjones2014/smart-splits.nvim',
+    keys = {
+      {
+        '<C-h>',
+        function()
+          require('smart-splits').move_cursor_left()
+        end,
+      },
+      {
+        '<C-j>',
+        function()
+          require('smart-splits').move_cursor_down()
+        end,
+      },
+      {
+        '<C-k>',
+        function()
+          require('smart-splits').move_cursor_up()
+        end,
+      },
+      {
+        '<C-l>',
+        function()
+          require('smart-splits').move_cursor_down()
+        end,
+      },
+    },
+    run = './kitty/install-kittens.bash',
+    opts = {
+      multiplexer_integration = 'kitty',
+    },
+  },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
