@@ -29,3 +29,7 @@ vim.keymap.set('n', '<A-k>', ':m.-2<CR>')
 -- Splits
 vim.keymap.set('n', '<leader>-', ':spl<CR>', { desc = 'Split horizontally' })
 vim.keymap.set('n', '<leader>|', ':vsp<CR>', { desc = 'Split vertically' })
+
+-- Open netrw
+vim.keymap.set('n', '<Tab>', ':e .<CR>', { desc = 'Open NetRW in project root' })
+vim.keymap.set('n', '-', ':Ex<CR>', { desc = 'Open NetRW in current file dir' })
