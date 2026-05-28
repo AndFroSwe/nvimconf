@@ -11,5 +11,6 @@ return {
         enabled = true,
       },
     },
+    render_modes = { 'n' },
   },
 }
