@@ -33,3 +33,8 @@ vim.keymap.set('n', '<leader>|', ':vsp<CR>', { desc = 'Split vertically' })
 -- Open netrw
 vim.keymap.set('n', '<Tab>', ':e .<CR>', { desc = 'Open NetRW in project root' })
 vim.keymap.set('n', '-', ':Ex<CR>', { desc = 'Open NetRW in current file dir' })
+
+-- Copy and paste to system
+vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
+vim.keymap.set('v', '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
+vim.keymap.set('n', '<leader>y', '"+y', { desc = 'Copy to system clipboard' })
