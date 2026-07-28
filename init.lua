@@ -45,6 +45,7 @@ require('lazy').setup({
   require 'kickstart.plugins.debug',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'custom.plugins.flutter',
 }, {
   ui = {
     icons = vim.g.have_nerd_font and {} or {
