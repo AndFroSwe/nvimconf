@@ -1,10 +1,15 @@
-return { -- Highlight, edit, and navigate code
+return {
   'nvim-treesitter/nvim-treesitter',
-  branch = 'master',
+  branch = 'main',
+  lazy = false,
   build = ':TSUpdate',
-  main = 'nvim-treesitter.configs',
-  opts = {
-    ensure_installed = {
+  config = function()
+    require('nvim-treesitter').setup {
+      install_dir = vim.fn.stdpath 'data' .. '/site', -- optional
+    }
+
+    -- Install parsers (replaces ensure_installed)
+    require('nvim-treesitter').install {
       'bash',
       'c',
       'cpp',
@@ -20,13 +25,27 @@ return { -- Highlight, edit, and navigate code
       'python',
       'json',
       'cmake',
-    },
-    -- Autoinstall languages that are not installed
-    auto_install = true,
-    highlight = {
-      enable = true,
-      additional_vim_regex_highlighting = { 'ruby' },
-    },
-    indent = { enable = true, disable = { 'ruby', 'c', 'cpp' } },
-  },
+      'matlab',
+      'typescript',
+      'javascript',
+      'css',
+      'scss',
+      'svelte',
+    }
+
+    -- Treesitter-based indentation (replacement for the old `indent` module),
+    -- with the same per-filetype disables as before
+    local indent_disable = { ruby = true, c = true, cpp = true, dart = true }
+
+    vim.api.nvim_create_autocmd('FileType', {
+      callback = function(args)
+        if indent_disable[args.match] then
+          return -- fall back to the default indentexpr
+        end
+        if pcall(vim.treesitter.start) then
+          vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+      end,
+    })
+  end,
 }

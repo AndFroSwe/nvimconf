@@ -186,7 +186,11 @@ return {
           },
         },
         neocmake = {},
-        asm_lsp = {},
+        svelte = {
+          -- cmd = {"svelteserver", "--stdio"}
+        },
+        vtsls = {},
+        -- asm_lsp = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {})
